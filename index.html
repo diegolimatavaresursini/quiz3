@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Economia de Santos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .question {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 10px 0;
+      padding: 10px;
+      background: #ecf0f1;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .options li:hover {
+      background: #d0e6f7;
+    }
+    .timer {
+      font-weight: bold;
+      color: #e74c3c;
+      text-align: right;
+    }
+    .score {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 30px;
+      color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Quiz: Economia de Santos</h2>
+    <div class="timer">Tempo: <span id="tempo">15</span>s</div>
+    <div class="question" id="pergunta"></div>
+    <ul class="options" id="opcoes"></ul>
+    <div class="score" id="pontuacao"></div>
+  </div>
+
+  <script>
+    const perguntas = [
+      { pergunta: "Qual é o principal gerador de receitas da economia de Santos?", opcoes: ["Turismo", "Comércio", "Porto", "Cinema"], resposta: 2 },
+      { pergunta: "Quantas empresas de economia criativa havia em Santos em 2023?", opcoes: ["13.642", "17.812", "21.424", "7.479"], resposta: 2 },
+      { pergunta: "Qual foi o crescimento da economia criativa em Santos em 10 anos?", opcoes: ["30,5%", "209%", "8,1%", "55.508,46%"], resposta: 1 }
+      // ... pode manter as demais perguntas
+    ];
+
+    let indice = 0;
+    let pontuacao = 0;
+    let tempo = 15;
+    let intervalo;
+
+    function carregarPergunta() {
+      if (indice >= perguntas.length) {
+        document.getElementById("pergunta").textContent = "Quiz finalizado!";
+        document.getElementById("opcoes").innerHTML = "";
+        document.getElementById("pontuacao").textContent = "Pontuação final: " + pontuacao;
+        clearInterval(intervalo);
+        return;
+      }
+
+      // resetar tempo
+      tempo = 15;
+      document.getElementById("tempo").textContent = tempo;
+
+      // mostrar pergunta
+      document.getElementById("pergunta").textContent = perguntas[indice].pergunta;
+
+      // mostrar opções
+      const lista = document.getElementById("opcoes");
+      lista.innerHTML = "";
+      perguntas[indice].opcoes.forEach((opcao, i) => {
+        const li = document.createElement("li");
+        li.textContent = opcao;
+        li.onclick = () => verificarResposta(i);
+        lista.appendChild(li);
+      });
+
+      // iniciar timer
+      clearInterval(intervalo);
+      intervalo = setInterval(() => {
+        tempo--;
+        document.getElementById("tempo").textContent = tempo;
+        if (tempo <= 0) {
+          clearInterval(intervalo);
+          indice++;
+          carregarPergunta();
+        }
+      }, 1000);
+    }
+
+    function verificarResposta(opcaoSelecionada) {
+      if (opcaoSelecionada === perguntas[indice].resposta) {
+        pontuacao++;
+      }
+      indice++;
+      carregarPergunta();
+    }
+
+    // iniciar quiz
+    carregarPergunta();
+  </script>
+</body>
+</html>
+
+
+export default App;
